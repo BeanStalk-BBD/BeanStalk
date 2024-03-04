@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import src.main.java.com.beanstalk.Backend.StalkBackend;
 import src.main.java.com.beanstalk.Draw.StalkDraw;
@@ -11,6 +13,9 @@ import src.main.java.com.beanstalk.Draw.StalkDraw;
 public class Main {
 
     private static boolean hasBeenAuthenticated = true;
+    private static Timer timer = new Timer();
+
+    private static TimerTask taskTimer = new TimerTask
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -76,25 +81,23 @@ public class Main {
         try {
             stalks = StalkBackend.GetStalks();
             StalkDraw.DrawStalk(stalks);
+
+            recentUsername = ""; // Reset recent username
+            recentlyRun = MethodType.STALKS;
         } catch (IOException | InterruptedException e) {
             Handle_Error(e);
         }
-
     }
 
     private static void Handle_Name(String input) {
-        if (input.split(" ").length == 1)
-        {
+        if (input.split(" ").length == 1) {
             Handle_GetStalk(input.substring(1));
-        }
-        else
-        {
+        } else {
             Handle_SendMessage(input.split(" ")[0].substring(1), input.split(" ")[1]);
         }
     }
 
-    private static void Handle_SendMessage(String username, String message)
-    {
+    private static void Handle_SendMessage(String username, String message) {
         try {
             StalkBackend.SendMessage(username, message);
         } catch (IOException | InterruptedException e) {
@@ -102,19 +105,38 @@ public class Main {
         }
     }
 
-    private static void Handle_GetStalk(String username)
-    {
+    private static void Handle_GetStalk(String username) {
         try {
             StalkBackend.GetSingleStalk(username);
+            recentUsername = username;
+            recentlyRun = MethodType.NAME;
         } catch (IOException | InterruptedException e) {
             Handle_Error(e);
         }
-        
     }
 
-    private static void Handle_Error(Exception e) 
-    {
+    private static void Handle_Error(Exception e) {
         e.printStackTrace();
     }
+
+    private static void startTimer() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (recentlyRun == MethodType.STALKS) {
+                    Handle_Stalks();
+                } else {
+                    Handle_Name(recentUsername);
+                }
+            }
+        }, 0, 2500);
+    }
+
+    private static enum MethodType {
+        STALKS, NAME
+    }
+
+    private static MethodType recentlyRun = MethodType.STALKS;
+    private static String recentUsername = "";
 
 }
