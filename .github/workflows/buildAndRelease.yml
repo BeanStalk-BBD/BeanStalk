@@ -55,6 +55,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.upload-url.outputs.upload_url }}
-        asset_path: ./target/your-executable.jar
-        asset_name: your-executable.jar
+        asset_path: ./target/beanstalk-1.0.0.jar
+        asset_name: beanstalk-1.0.0.jar
         asset_content_type: application/java-archive
