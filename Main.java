@@ -1,9 +1,9 @@
-package src;
-
 import java.io.IOException;
 import java.util.Scanner;
 
-public class CLIHandler {
+import src.StalkDraw;
+
+public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String input;
@@ -12,8 +12,8 @@ public class CLIHandler {
 
         while (true) {
             StalkDraw.clear();
-            System.out.println("                   🌱 b e a n s t a l k");
-            System.out.println("                logged in a @chrisss");
+            System.out.println("                  b e a n s t a l k");
+            System.out.println("                logged in as @chrisss");
             input = scanner.nextLine();
             // Process input here, or simply display it
             System.out.println("You entered: " + input);
