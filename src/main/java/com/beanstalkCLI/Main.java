@@ -1,4 +1,4 @@
-package com.beanstalk;
+package com.beanstalkCLI;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.beanstalk.Draw.StalkDraw;
-import com.beanstalk.Backend.StalkBackend;
+import com.beanstalkCLI.Backend.StalkBackend;
+import com.beanstalkCLI.Draw.StalkDraw;
 
 
 public class Main {
