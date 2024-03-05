@@ -52,6 +52,11 @@ jobs:
         draft: false
         prerelease: false
 
+    - name: Echo
+      run: |
+        cd target
+        dir
+
     - name: Upload Release Asset
       id: upload-release-asset
       uses: actions/upload-release-asset@v1
