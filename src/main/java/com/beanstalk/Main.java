@@ -1,21 +1,19 @@
-package src.main.java.com.beanstalk;
+package com.beanstalk;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import src.main.java.com.beanstalk.Backend.StalkBackend;
-import src.main.java.com.beanstalk.Draw.StalkDraw;
+import com.beanstalk.Draw.StalkDraw;
+import com.beanstalk.Backend.StalkBackend;
+
 
 public class Main {
 
     private static boolean hasBeenAuthenticated = true;
     private static Timer timer = new Timer();
-
-    private static TimerTask taskTimer = new TimerTask
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -46,7 +44,7 @@ public class Main {
                             Handle_Version();
                             break;
                         default:
-                            Handle_Name();
+                            Handle_Name(input);
                             break;
                     }
                 } else {

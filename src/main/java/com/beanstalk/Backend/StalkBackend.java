@@ -1,4 +1,4 @@
-package src.main.java.com.beanstalk.Backend;
+package com.beanstalk.Backend;
 
 import java.io.IOException;
 import java.net.URI;

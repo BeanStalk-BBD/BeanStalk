@@ -1,4 +1,4 @@
-package src.main.java.com.beanstalk.Draw;
+package com.beanstalk.Draw;
 import java.util.List;
 
 public class StalkDraw {
