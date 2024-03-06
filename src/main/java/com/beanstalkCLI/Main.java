@@ -6,22 +6,29 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import com.beanstalkCLI.Backend.StalkBackend;
 import com.beanstalkCLI.Draw.StalkDraw;
 
-
+@SpringBootApplication
 public class Main {
 
     private static boolean hasBeenAuthenticated = true;
     private static Timer timer = new Timer();
 
+    
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
         Scanner scanner = new Scanner(System.in);
         String input;
 
         // setTerminalDimensions(16, 12);
 
-        StalkDraw.clear();
+        //StalkDraw.clear();
         System.out.println("                  b e a n s t a l k");
         System.out.println("                logged in as @chrisss");
 
@@ -137,4 +144,13 @@ public class Main {
     private static MethodType recentlyRun = MethodType.STALKS;
     private static String recentUsername = "";
 
+}
+
+@Controller
+class WebController {
+
+    @GetMapping("/")
+    public String home() {
+        return "index";
+    }
 }
