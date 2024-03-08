@@ -1,10 +1,10 @@
-package com.beanstalks.beanstalks;
+package com.beanstalk.beanstalk;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BeanstalksApplicationTests {
+class BeanstalkApplicationTests {
 
 	@Test
 	void contextLoads() {
