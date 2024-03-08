@@ -5,8 +5,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Users {
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
     private int UserID;
     // @Nationalized
     private String UserName;
