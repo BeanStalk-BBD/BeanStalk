@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 @RestController
-@RequestMapping("/Users")
+//Users
+@RequestMapping("/")
 public class UsersController {
     @Autowired
     UsersService userService;
@@ -22,4 +23,5 @@ public class UsersController {
     public List<Users> getUsers(){
         return userService.list();
     }
+
 }
