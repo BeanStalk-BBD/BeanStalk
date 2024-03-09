@@ -90,22 +90,14 @@ resource "aws_db_subnet_group" "database_subnet_group" {
     Name = "database-subnets-2"
   }
 }
-variable "password" {
-  description = "The password for the DB FantasyTCStore user"
-  type        = string
-}
-variable "username" {
-  description = "The username for the DB FantasyTCStore user"
-  type        = string
-}
 
 resource "aws_db_instance" "default" {
   engine              = "postgres"  # Use "postgres" for PostgreSQL
   engine_version      = "16.1"      # Adjust the version as needed
   multi_az            = false
   identifier          = "beanstalk"
-  username            = var.username
-  password            = var.password
+  username = jsondecode(data.aws_secretsmanager_secret_version.creds.secret_string)["username"]
+  password = jsondecode(data.aws_secretsmanager_secret_version.creds.secret_string)["password"]
   instance_class      = "db.t3.micro"
   allocated_storage   = 20
   db_subnet_group_name = aws_db_subnet_group.database_subnet_group.name
