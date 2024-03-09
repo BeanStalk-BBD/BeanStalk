@@ -1,7 +1,10 @@
 package com.beanstalk.backend.rest;
 
 import com.beanstalk.backend.model.ChatDTO;
+import com.beanstalk.backend.model.MessageDTO;
 import com.beanstalk.backend.service.ChatService;
+import com.beanstalk.backend.service.MessageService;
+
 import com.beanstalk.backend.util.ReferencedException;
 import com.beanstalk.backend.util.ReferencedWarning;
 import jakarta.validation.Valid;
@@ -24,9 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatResource {
 
     private final ChatService chatService;
+    private final MessageService messageService;
 
-    public ChatResource(final ChatService chatService) {
+    public ChatResource(final ChatService chatService, final MessageService messageService) {
         this.chatService = chatService;
+        this.messageService = messageService;
     }
 
     @GetMapping
@@ -60,6 +65,12 @@ public class ChatResource {
         }
         chatService.delete(chatId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{chatId}/messages")
+    public ResponseEntity<List<MessageDTO>> getChatMessages(
+            @PathVariable(name = "chatId") final Integer chatId) {
+        return ResponseEntity.ok(messageService.findAllByChatId(chatId));
     }
 
 }

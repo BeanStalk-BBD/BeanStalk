@@ -56,6 +56,14 @@ public class MessageService {
     public void delete(final Integer messageId) {
         messageRepository.deleteById(messageId);
     }
+    public List<MessageDTO> findAllByChatId(final Integer chatId) {
+        Chat chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new NotFoundException("chat not found"));
+        final List<Message> messages = messageRepository.findAllByChat(chat);
+        return messages.stream()
+                .map(message -> mapToDTO(message, new MessageDTO()))
+                .toList();
+    }
 
     private MessageDTO mapToDTO(final Message message, final MessageDTO messageDTO) {
         messageDTO.setMessageId(message.getMessageId());
@@ -65,6 +73,7 @@ public class MessageService {
         messageDTO.setMessageSender(message.getMessageSender() == null ? null : message.getMessageSender().getUserId());
         return messageDTO;
     }
+
 
     private Message mapToEntity(final MessageDTO messageDTO, final Message message) {
         message.setMessageContent(messageDTO.getMessageContent());

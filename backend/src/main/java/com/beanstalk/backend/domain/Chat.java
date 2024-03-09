@@ -35,11 +35,11 @@ public class Chat {
     private Integer chatId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chatuserid1id", nullable = false)
+    @JoinColumn(name = "chatuserid1", nullable = false)
     private User chatUserId1;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chatuserid2id", nullable = false)
+    @JoinColumn(name = "chatuserid2", nullable = false)
     private User chatUserId2;
 
     @OneToMany(mappedBy = "chat")
