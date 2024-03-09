@@ -99,7 +99,7 @@ variable "username" {
   type        = string
 }
 
-# resource "aws_db_instance" "default" {
+resource "aws_db_instance" "default" {
   engine              = "postgres"  # Use "postgres" for PostgreSQL
   engine_version      = "16.1"      # Adjust the version as needed
   multi_az            = false
