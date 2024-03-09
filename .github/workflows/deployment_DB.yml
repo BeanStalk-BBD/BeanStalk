@@ -31,7 +31,7 @@ jobs:
           docker run --rm
           --volume ${{ github.workspace }}/database:/flyway/sql:ro
           redgate/flyway
-          -validateMigrationNaming="false"
+          -validateMigrationNaming=false
           -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}"
           -url="${{ env.FW_URL }}"
           -user="${{ env.FW_USER }}"
