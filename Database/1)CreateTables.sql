@@ -1,33 +1,3 @@
--- Create a new database called 'Beanstalk'
--- Connect to the 'master' database to run this snippet
-USE master
-GO
--- Set the database to single user mode to close existing connections
-ALTER DATABASE Beanstalk SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-GO
--- Drop the database if it exists
-IF EXISTS (
-    SELECT name
-        FROM sys.databases
-        WHERE name = N'Beanstalk'
-)
-DROP DATABASE Beanstalk;
-GO
-
-CREATE DATABASE Beanstalk
-GO
-USE Beanstalk
-GO
-CREATE TABLE Users(
-    UserID INT IDENTITY(1,1) NOT NULL,
-    UserName NVARCHAR(50) NOT NULL,
-    OAuthUserName VARCHAR(50) NOT NULL,
-    Auth0ID VARCHAR(50) NOT NULL,
-);
-ALTER TABLE Users
-ADD CONSTRAINT PK_Users PRIMARY KEY (UserID);
-GO
-
 
 CREATE TABLE Chat(
     ChatID INT IDENTITY(1,1) NOT NULL,

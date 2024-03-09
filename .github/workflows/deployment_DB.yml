@@ -29,8 +29,9 @@ jobs:
       - name: Continuous Integration Flyway Clean Migrate
         run: >-
           docker run --rm
-          --volume ${{ github.workspace }}/database/migrations:/flyway/sql:ro
+          --volume ${{ github.workspace }}/database:/flyway/sql:ro
           redgate/flyway
+          -validateMigrationNaming="false"
           -licenseKey="${{ env.FLYWAY_LICENSE_KEY }}"
           -url="${{ env.FW_URL }}"
           -user="${{ env.FW_USER }}"
