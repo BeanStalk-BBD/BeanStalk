@@ -46,7 +46,7 @@ resource "aws_security_group" "example_sg" {
 
 resource "aws_db_instance" "default" {
   allocated_storage = 20
-  engine = "sqlserver-ex"
+  engine = "PostgreSQL"
   instance_class = "db.t3.micro"
  username = jsondecode(data.aws_secretsmanager_secret_version.creds.secret_string)["username"]
   password = jsondecode(data.aws_secretsmanager_secret_version.creds.secret_string)["password"]
