@@ -1,0 +1,81 @@
+package com.beanstalk.backend.service;
+
+import com.beanstalk.backend.domain.Chat;
+import com.beanstalk.backend.domain.Message;
+import com.beanstalk.backend.domain.User;
+import com.beanstalk.backend.model.MessageDTO;
+import com.beanstalk.backend.repos.ChatRepository;
+import com.beanstalk.backend.repos.MessageRepository;
+import com.beanstalk.backend.repos.UserRepository;
+import com.beanstalk.backend.util.NotFoundException;
+import java.util.List;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class MessageService {
+
+    private final MessageRepository messageRepository;
+    private final ChatRepository chatRepository;
+    private final UserRepository userRepository;
+
+    public MessageService(final MessageRepository messageRepository,
+            final ChatRepository chatRepository, final UserRepository userRepository) {
+        this.messageRepository = messageRepository;
+        this.chatRepository = chatRepository;
+        this.userRepository = userRepository;
+    }
+
+    public List<MessageDTO> findAll() {
+        final List<Message> messages = messageRepository.findAll(Sort.by("messageId"));
+        return messages.stream()
+                .map(message -> mapToDTO(message, new MessageDTO()))
+                .toList();
+    }
+
+    public MessageDTO get(final Integer messageId) {
+        return messageRepository.findById(messageId)
+                .map(message -> mapToDTO(message, new MessageDTO()))
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public Integer create(final MessageDTO messageDTO) {
+        final Message message = new Message();
+        mapToEntity(messageDTO, message);
+        return messageRepository.save(message).getMessageId();
+    }
+
+    public void update(final Integer messageId, final MessageDTO messageDTO) {
+        final Message message = messageRepository.findById(messageId)
+                .orElseThrow(NotFoundException::new);
+        mapToEntity(messageDTO, message);
+        messageRepository.save(message);
+    }
+
+    public void delete(final Integer messageId) {
+        messageRepository.deleteById(messageId);
+    }
+
+    private MessageDTO mapToDTO(final Message message, final MessageDTO messageDTO) {
+        messageDTO.setMessageId(message.getMessageId());
+        messageDTO.setMessageContent(message.getMessageContent());
+        messageDTO.setMessageTimeStamp(message.getMessageTimeStamp());
+        messageDTO.setChat(message.getChat() == null ? null : message.getChat().getChatId());
+        messageDTO.setMessageSender(message.getMessageSender() == null ? null : message.getMessageSender().getUserId());
+        return messageDTO;
+    }
+
+    private Message mapToEntity(final MessageDTO messageDTO, final Message message) {
+        message.setMessageContent(messageDTO.getMessageContent());
+        message.setMessageTimeStamp(messageDTO.getMessageTimeStamp());
+        final Chat chat = messageDTO.getChat() == null ? null : chatRepository.findById(messageDTO.getChat())
+                .orElseThrow(() -> new NotFoundException("chat not found"));
+        message.setChat(chat);
+        final User messageSender = messageDTO.getMessageSender() == null ? null : userRepository.findById(messageDTO.getMessageSender())
+                .orElseThrow(() -> new NotFoundException("messageSender not found"));
+        message.setMessageSender(messageSender);
+        return message;
+    }
+
+}
