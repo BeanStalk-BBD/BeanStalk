@@ -45,5 +45,5 @@ resource "aws_db_instance" "default" {
   password = jsondecode(data.aws_secretsmanager_secret_version.creds.secret_string)["password"]
   skip_final_snapshot = true // required to destroy
   publicly_accessible= true
-  identifier = "dog-grooming"
+  identifier = "beanstalk"
 }
