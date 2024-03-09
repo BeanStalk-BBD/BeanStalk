@@ -1,9 +1,7 @@
-name: CD
+name: Build and Release - DB
 
 on:
   push:
-    branches:
-      - main
 
 env:
   AWS_REGION: "eu-west-1"
@@ -60,12 +58,15 @@ jobs:
 
       - name: Terraform Init
         working-directory: "Infrastructure"
+        env: 
+          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
         run: terraform init
 
-      # - name: Terraform Validate
-      #   id: validate
-      #   working-directory: 'Infrastructure'
-      #   run: terraform validate
+      - name: Terraform Validate
+        id: validate
+        working-directory: 'Infrastructure'
+        run: terraform validate
 
       - name: Terraform Plan
         id: plan
@@ -75,14 +76,3 @@ jobs:
       - name: Terraform Apply
         working-directory: Infrastructure
         run: terraform apply -auto-approve
-
-  # AmazonWebServices:
-  #   needs: ConfigureAwsAndTerraform
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - name: Launch AWS Server
-  #     run: |
-  #       # Use AWS CLI or SDK to launch the server
-  #       # Example:
-  #       aws ec2 run-instances --image-id ${{ env.AMI-XXX }} --count 1 --instance-type t2.micro --key-name my-key-pair --security-group-ids ${{ env.SG-XXX }} --subnet-id ${{ env.SUBNET-XXX }}

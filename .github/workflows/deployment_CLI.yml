@@ -1,80 +1,64 @@
-name: CD
+name: Build and Release CLI
 
 on:
   push:
-    branches:
-      - main
 
 env:
   AWS_REGION: "eu-west-1"
   AWS_IAM_ROLE_ARN: ${{ secrets.AWS_IAM_ROLE_ARN }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_AMI_XXX: ${{ secrets.AWS_AMI_XXX }} # Unimplemented
-  AWS_SG_XXX: ${{ secrets.AWS_SG_XXX }} # Unimplemented
-  AWS_SUBNET_XXX: ${{ secrets.AWS_SUBNET_XXX }} # Unimplemented
+  AWS_AMI_XXX: ${{ secrets.AWS_AMI_XXX }}                       # Unimplemented
+  AWS_SG_XXX: ${{ secrets.AWS_SG_XXX }}                         # Unimplemented
+  AWS_SUBNET_XXX: ${{ secrets.AWS_SUBNET_XXX }}                 # Unimplemented
 
-  TF_VAR_db_username: ${{ secrets.DB_NAME }}
+  TF_VAR_db_username: ${{ secrets.DB_USERNAME }}
   TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
   FW_HOST: ${{ secrets.DB_SERVER_HOST_NAME }}
   FW_NAME: ${{ secrets.DB_NAME }}
   FW_USER: ${{ secrets.DB_USERNAME }}
   FW_PASS: ${{ secrets.DB_PASSWORD }}
-  FW_URL: ${{ secrets.DB_URL }}
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  FlywayMigration:
-    name: Run Flyway Migration
-
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3.0.0
-
-      - name: Continuous Integration Flyway Clean Migrate
-        run: >-
-          docker run --rm
-          --volume ${{ github.workspace }}/database/migrations:/flyway/sql:ro
-          redgate/flyway
-          -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}"
-          -url="${{ secrets.DB_URL }}"
-          -user="${{ secrets.DB_USERNAME }}"
-          -password="${{ secrets.DB_PASSWORD }}" migrate
-  ConfigureAwsAndTerraform:
-    needs: FlywayMigration
+  build:
+    permissions: write-all
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v2
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ env.AWS_IAM_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
-          audience: sts.amazonaws.com
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'oracle'
 
-      - uses: hashicorp/setup-terraform@v3
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+      
+    - name: release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: ${{ steps.version.outputs.version }}
+        tag_name: ${{ steps.version.outputs.version }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Terraform Init
-        working-directory: "Infrastructure"
-        env: 
-          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-          AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_BUCKET_KEY_NAME }}
-        run: terraform init
-
-      - name: Terraform Validate
-        id: validate
-        working-directory: 'Infrastructure'
-        run: terraform validate
-
-      - name: Terraform Plan
-        id: plan
-        working-directory: "Infrastructure"
-        run: terraform plan
-
-      - name: Terraform Apply
-        working-directory: Infrastructure
-        run: terraform apply -auto-approve
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./target/beanstalk-1.0.0.jar
+        asset_name: beanstalk-1.0.0.jar
+        asset_content_type: application/java-archive

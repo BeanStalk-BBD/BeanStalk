@@ -1,4 +1,4 @@
-name: Deploy API to Beanstalk
+name: Build and Release - API
 on:
   push:
 
