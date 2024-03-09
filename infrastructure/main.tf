@@ -94,10 +94,10 @@ resource "aws_db_subnet_group" "database_subnet_group" {
 
 # create the rds instance
 resource "aws_db_instance" "default" {
-  engine         = "sqlserver-ex"
-  engine_version = "16.00.4095.4.v1"
+  engine         = "postgres"
+  engine_version = "16"
   multi_az       = false
-  identifier     = "beanstalk-msserver"
+  identifier     = "beanstalk"
   username = jsondecode(data.aws_secretsmanager_secret_version.creds.secret_string)["username"]
   password = jsondecode(data.aws_secretsmanager_secret_version.creds.secret_string)["password"]
   instance_class         = "db.t3.micro"
@@ -105,7 +105,6 @@ resource "aws_db_instance" "default" {
   db_subnet_group_name   = aws_db_subnet_group.database_subnet_group.name
   vpc_security_group_ids = [aws_security_group.database_security_group_2.id]
   availability_zone      = data.aws_availability_zones.available_zones.names[0]
-  # db_name                = "fantasycarddb"
   skip_final_snapshot = true
   publicly_accessible = true
 }
