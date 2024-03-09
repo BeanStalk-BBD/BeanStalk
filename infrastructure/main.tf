@@ -1,18 +1,25 @@
 # Create a VPC
 resource "aws_vpc" "example_vpc" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = "172.30.0.0/16"
 }
 
 # Create Subnet 1
 resource "aws_subnet" "subnet1" {
   vpc_id     = aws_vpc.example_vpc.id
-  cidr_block = "10.0.0.0/17"
+  cidr_block = "172.30.0.0/24"
 }
 
 # Create Subnet 2
 resource "aws_subnet" "subnet2" {
   vpc_id     = aws_vpc.example_vpc.id
-  cidr_block = "10.0.128.0/17"
+  cidr_block = "172.30.1.0/24"
+}
+
+
+# Create Subnet 2
+resource "aws_subnet" "subnet3" {
+  vpc_id     = aws_vpc.example_vpc.id
+  cidr_block = "172.30.2.0/24"
 }
 
 # Create a security group
