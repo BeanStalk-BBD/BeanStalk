@@ -44,6 +44,14 @@ public class MessageResource {
         return new ResponseEntity<>(createdMessageId, HttpStatus.CREATED);
     }
 
+    @PostMapping("/sendMessage/{recieverID}")
+    public ResponseEntity<Long> sendMessage(@RequestBody @Valid final MessageDTO messageDTO, @PathVariable(name="recieverID") final int recieverID) {
+        int chatID=messageService.getChatId(messageDTO, recieverID);
+        messageDTO.setChat(chatID);
+        final Long createdMessageId = messageService.create(messageDTO);
+        return new ResponseEntity<>(createdMessageId, HttpStatus.CREATED);
+    }
+
     @PutMapping("/{messageId}")
     public ResponseEntity<Long> updateMessage(
             @PathVariable(name = "messageId") final Long messageId,

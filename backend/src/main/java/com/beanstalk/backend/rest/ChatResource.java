@@ -73,9 +73,10 @@ public class ChatResource {
         return ResponseEntity.ok(messageService.findAllByChatId(chatId));
     }
 
-    @GetMapping("/{chatId}/messages10/")
+    @GetMapping({"/{chatId}/messages10/{page}","/{chatId}/messages10/"})
     public ResponseEntity<List<MessageDTO>> getChatMessages10(
-            @PathVariable(name = "chatId") final Integer chatId) {
-        return ResponseEntity.ok(messageService.findTop10ByChatId(chatId));
+            @PathVariable(name = "chatId") final Integer chatId, @PathVariable(name="page", required = false) final Integer page) {
+                int pageNumber = (page == null) ? 0 : page;
+        return ResponseEntity.ok(messageService.findTop10ByChatId(chatId,pageNumber));
     }
 }

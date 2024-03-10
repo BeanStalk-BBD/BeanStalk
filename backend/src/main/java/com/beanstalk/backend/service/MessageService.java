@@ -68,10 +68,10 @@ public class MessageService {
                 .map(message -> mapToDTO(message, new MessageDTO()))
                 .toList();
     }
-    public List<MessageDTO> findTop10ByChatId(final Integer chatId) {
+    public List<MessageDTO> findTop10ByChatId(final Integer chatId, final Integer pageNumber) {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new NotFoundException("chat not found"));
-                Pageable topTen = PageRequest.of(0, 10); 
+                Pageable topTen = PageRequest.of(pageNumber, 10); 
         final List<Message> messages = messageRepository.findTop10ByChat(chat, topTen);
         return messages.stream()
                 .map(message -> mapToDTO(message, new MessageDTO()))
@@ -98,6 +98,11 @@ public class MessageService {
                 .orElseThrow(() -> new NotFoundException("messageSender not found"));
         message.setMessageSender(messageSender);
         return message;
+    }
+
+    public int getChatId(final MessageDTO messageDTO, int reciever ){
+        int sender=messageDTO.getMessageSender();
+        return(messageRepository.getChatID(sender, reciever));
     }
 
 }
