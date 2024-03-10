@@ -34,19 +34,19 @@ public class MessageResource {
 
     @GetMapping("/{messageId}")
     public ResponseEntity<MessageDTO> getMessage(
-            @PathVariable(name = "messageId") final Integer messageId) {
+            @PathVariable(name = "messageId") final Long messageId) {
         return ResponseEntity.ok(messageService.get(messageId));
     }
 
     @PostMapping
-    public ResponseEntity<Integer> createMessage(@RequestBody @Valid final MessageDTO messageDTO) {
-        final Integer createdMessageId = messageService.create(messageDTO);
+    public ResponseEntity<Long> createMessage(@RequestBody @Valid final MessageDTO messageDTO) {
+        final Long createdMessageId = messageService.create(messageDTO);
         return new ResponseEntity<>(createdMessageId, HttpStatus.CREATED);
     }
 
     @PutMapping("/{messageId}")
-    public ResponseEntity<Integer> updateMessage(
-            @PathVariable(name = "messageId") final Integer messageId,
+    public ResponseEntity<Long> updateMessage(
+            @PathVariable(name = "messageId") final Long messageId,
             @RequestBody @Valid final MessageDTO messageDTO) {
         messageService.update(messageId, messageDTO);
         return ResponseEntity.ok(messageId);
@@ -54,7 +54,7 @@ public class MessageResource {
 
     @DeleteMapping("/{messageId}")
     public ResponseEntity<Void> deleteMessage(
-            @PathVariable(name = "messageId") final Integer messageId) {
+            @PathVariable(name = "messageId") final Long messageId) {
         messageService.delete(messageId);
         return ResponseEntity.noContent().build();
     }

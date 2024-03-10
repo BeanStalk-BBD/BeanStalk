@@ -38,26 +38,26 @@ public class MessageService {
                 .toList();
     }
 
-    public MessageDTO get(final Integer messageId) {
+    public MessageDTO get(final Long messageId) {
         return messageRepository.findById(messageId)
                 .map(message -> mapToDTO(message, new MessageDTO()))
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Integer create(final MessageDTO messageDTO) {
+    public Long create(final MessageDTO messageDTO) {
         final Message message = new Message();
         mapToEntity(messageDTO, message);
         return messageRepository.save(message).getMessageId();
     }
 
-    public void update(final Integer messageId, final MessageDTO messageDTO) {
+    public void update(final Long messageId, final MessageDTO messageDTO) {
         final Message message = messageRepository.findById(messageId)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(messageDTO, message);
         messageRepository.save(message);
     }
 
-    public void delete(final Integer messageId) {
+    public void delete(final Long messageId) {
         messageRepository.deleteById(messageId);
     }
     public List<MessageDTO> findAllByChatId(final Integer chatId) {
@@ -71,7 +71,7 @@ public class MessageService {
     public List<MessageDTO> findTop10ByChatId(final Integer chatId) {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new NotFoundException("chat not found"));
-                Pageable topTen = PageRequest.of(0, 2); 
+                Pageable topTen = PageRequest.of(0, 10); 
         final List<Message> messages = messageRepository.findTop10ByChat(chat, topTen);
         return messages.stream()
                 .map(message -> mapToDTO(message, new MessageDTO()))

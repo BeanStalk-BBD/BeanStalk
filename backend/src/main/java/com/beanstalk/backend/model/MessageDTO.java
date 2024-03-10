@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class MessageDTO {
 
-    private Integer messageId;
+    private Long messageId;
 
     @NotNull
     @Size(max = 20)

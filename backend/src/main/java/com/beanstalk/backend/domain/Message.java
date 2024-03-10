@@ -33,7 +33,7 @@ public class Message {
             strategy = GenerationType.SEQUENCE,
             generator = "primary_sequence"
     )
-    private Integer messageId;
+    private Long messageId;
 
     @Column(nullable = false, length = 20, name = "messagecontent")
     private String messageContent;
