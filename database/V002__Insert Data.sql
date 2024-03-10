@@ -1,6 +1,3 @@
-USE Beanstalk
-GO
-
 
 -- Insert some mock data into the Users table
 INSERT INTO Users (UserName, OAuthUserName, Auth0ID)
