@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
+import org.springframework.data.repository.query.Param;
 
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
@@ -25,5 +26,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Procedure("GetOrCreateChatSP")
     int getChatID(int UserID1, int UserID2);
+
+    @Query("SELECTT Username FROM GetOpenChats(:userID) ORDER BY LatestMessageTimeStamp")
+    List<String> findOpenChatsByUserID(@Param("userID"))
 
 }

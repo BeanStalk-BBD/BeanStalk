@@ -8,6 +8,8 @@ import com.beanstalk.backend.repos.ChatRepository;
 import com.beanstalk.backend.repos.MessageRepository;
 import com.beanstalk.backend.repos.UserRepository;
 import com.beanstalk.backend.util.NotFoundException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -103,6 +105,12 @@ public class MessageService {
     public int getChatId(final MessageDTO messageDTO, int reciever ){
         int sender=messageDTO.getMessageSender();
         return(messageRepository.getChatID(sender, reciever));
+    }
+
+    public List<String> getOpenChats(int userId, int pageNumber){
+        List<String> ret= new ArrayList<String>();
+
+        return(ret);
     }
 
 }

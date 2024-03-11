@@ -8,6 +8,9 @@ import com.beanstalk.backend.service.MessageService;
 import com.beanstalk.backend.util.ReferencedException;
 import com.beanstalk.backend.util.ReferencedWarning;
 import jakarta.validation.Valid;
+
+import static java.lang.annotation.ElementType.METHOD;
+
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -73,10 +78,16 @@ public class ChatResource {
         return ResponseEntity.ok(messageService.findAllByChatId(chatId));
     }
 
-    @GetMapping({"/{chatId}/messages10/{page}","/{chatId}/messages10/"})
+    @GetMapping({"/{chatId}/messages10/{page}","/{chatId}/messages10"})
     public ResponseEntity<List<MessageDTO>> getChatMessages10(
             @PathVariable(name = "chatId") final Integer chatId, @PathVariable(name="page", required = false) final Integer page) {
                 int pageNumber = (page == null) ? 0 : page;
         return ResponseEntity.ok(messageService.findTop10ByChatId(chatId,pageNumber));
     }
+    @GetMapping({"/openchats/{userId}/{page}","/openchats/{userId}"})
+    public ResponseEntity<List<String>> getOpenChats(@PathVariable(name="userId") final Integer userId, @PathVariable(name="page",required = false) final Integer page) {
+        int pageNumber = (page == null) ? 0 : page;
+        return ResponseEntity.ok(messageService.getOpenChats(userId,pageNumber));
+    }
+    
 }
