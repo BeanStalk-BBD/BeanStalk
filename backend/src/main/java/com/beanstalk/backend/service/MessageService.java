@@ -108,8 +108,8 @@ public class MessageService {
     }
 
     public List<String> getOpenChats(int userId, int pageNumber){
-        System.out.println(messageRepository.findOpenChatsByUserID(userId));
-        return(messageRepository.findOpenChatsByUserID(userId));
+        Pageable topTen = PageRequest.of(pageNumber, 5); 
+        return(messageRepository.findOpenChatsByUserID(userId,topTen));
     }
 
 }
