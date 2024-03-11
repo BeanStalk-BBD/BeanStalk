@@ -27,7 +27,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Procedure("GetOrCreateChatSP")
     int getChatID(int UserID1, int UserID2);
 
-    @Query("SELECTT Username FROM GetOpenChats(:userID) ORDER BY LatestMessageTimeStamp")
-    List<String> findOpenChatsByUserID(@Param("userID"))
+    @Query(value = "SELECT UserName FROM GetOpenChats(:userID) ORDER BY LatestMessageTimeStamp DESC", nativeQuery = true)
+    List<String> findOpenChatsByUserID(@Param("userID") int userID);    
 
 }

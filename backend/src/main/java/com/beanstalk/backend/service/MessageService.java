@@ -108,9 +108,8 @@ public class MessageService {
     }
 
     public List<String> getOpenChats(int userId, int pageNumber){
-        List<String> ret= new ArrayList<String>();
-
-        return(ret);
+        System.out.println(messageRepository.findOpenChatsByUserID(userId));
+        return(messageRepository.findOpenChatsByUserID(userId));
     }
 
 }
