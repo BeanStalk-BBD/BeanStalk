@@ -43,6 +43,10 @@ jobs:
         output-credentials: true
         audience: sts.amazonaws.com
 
+    - name: Set output
+      id: vars
+      run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
       with:
@@ -50,6 +54,6 @@ jobs:
         aws_secret_key: ${{ steps.creds.outputs.aws-secret-access-key }}
         application_name: beanstalk
         environment_name: Beanstalk-env-2
-        version_label: 0.0.4
+        version_label: ${{ steps.vars.outputs.tag }}
         region: eu-west-1
         deployment_package: deploy.zip

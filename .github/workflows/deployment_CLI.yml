@@ -42,14 +42,18 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       
+    - name: Set output
+      id: vars
+      run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
     - name: release
       uses: actions/create-release@v1
       id: create_release
       with:
         draft: false
         prerelease: false
-        release_name: ${{ steps.version.outputs.version }}
-        tag_name: ${{ steps.version.outputs.version }}
+        release_name: Release ${{ steps.vars.outputs.tag }}
+        tag_name: ${{ steps.vars.outputs.version }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
