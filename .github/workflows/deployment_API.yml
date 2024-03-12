@@ -1,7 +1,13 @@
 name: Build and Release - API
 on:
   push:
-      
+
+
+env:
+  AWS_REGION: "eu-west-1"
+  AWS_IAM_ROLE_ARN: ${{ secrets.AWS_IAM_ROLE_ARN }}
+
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,13 +30,20 @@ jobs:
     - name: Generate deployment package
       run: zip -r deploy.zip . -x '*.git*'
 
+    - uses: aws-actions/configure-aws-credentials@v4
+      id: creds
+      with:
+        role-to-assume: ${{ env.AWS_IAM_ROLE_ARN }}
+        aws-region: ${{ env.AWS_REGION }}
+        audience: sts.amazonaws.com
+
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
       with:
-        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_access_key: ${{ steps.creds.outputs.aws-access-key-id }}
+        aws_secret_key: ${{ steps.creds.outputs.aws-secret-access-key }}
         application_name: beanstalk
-        environment_name: beanstalk
+        environment_name: Beanstalk-env-2
         version_label: 1
         region: eu-west-1
         deployment_package: deploy.zip
