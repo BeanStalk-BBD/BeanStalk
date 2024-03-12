@@ -33,7 +33,7 @@ public class StalkCommand extends SecuredCommand {
     @ShellMethodAvailability("isUserSignedIn")
     public void bean(@ShellOption({"-R", "--recipient"}) String recipient, @ShellOption({"-M", "--message"}) String message) {
         Message message_model = new Message(message, OffsetDateTime.now(), 1, userId);
-        beanStalkClient.postMessage(2, message_model);
+        beanStalkClient.postMessage(recipient, message_model);
     }
 
     @ShellMethod("Displays the stalk for the specified recipient.")

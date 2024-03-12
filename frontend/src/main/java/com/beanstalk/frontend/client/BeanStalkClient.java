@@ -18,7 +18,7 @@ public interface BeanStalkClient {
     @GetExchange("/chats/openchats/{userId}/{page}") //value = {"/article", "/article/{id}"}
     List<String> getStalks(@PathVariable Integer userId, @PathVariable Integer page);
 
-    @PostExchange("/messages/sendMessage/{recieverID}")
-    Message postMessage(@PathVariable Integer recieverID, @RequestBody Message messageResponse);
+    @PostExchange("/messages/sendMessage/{recieverName}")
+    Message postMessage(@PathVariable String recieverName, @RequestBody Message messageResponse);
 
 }
