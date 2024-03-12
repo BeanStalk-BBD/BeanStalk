@@ -14,7 +14,7 @@ permissions:
   
 
 jobs:
-  build:
+  BuildJavaApplication:
     runs-on: ubuntu-latest
     steps:
 
@@ -31,7 +31,11 @@ jobs:
       run: |
         cd backend  
         mvn -B package --file pom.xml
-      
+  
+  DeployToBeanstalk:
+    needs: BuildJavaApplication
+    runs-on: ubuntu-latest
+    steps:
     - uses: aws-actions/configure-aws-credentials@v4
       id: creds
       with:
