@@ -12,7 +12,7 @@ env:
   FLYWAY_LICENSE_KEY: ${{ secrets. FW_LICENSE_KEY }}
   FW_USER: ${{ secrets.DB_USERNAME }}
   FW_PASS: ${{ secrets.DB_PASSWORD }}
-  FW_URL: ${{ secrets.DB_URL }}
+  FW_URL: ${{ secrets.JPA_DB_URL }}
 
 permissions:
   id-token: write
