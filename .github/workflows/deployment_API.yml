@@ -1,7 +1,8 @@
 name: Build and Release - API
 on:
   push:
-
+    tags:
+      - 'v*.*.*'
 
 env:
   AWS_REGION: "eu-west-1"
