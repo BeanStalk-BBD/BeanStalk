@@ -38,8 +38,8 @@ public class StalkCommand extends SecuredCommand {
 
     @ShellMethod("Displays the stalk for the specified recipient.")
     @ShellMethodAvailability("isUserSignedIn")
-    public List<MessageResponse> stalk(@ShellOption({"-R", "--recipient"}) int chatId) { //@ShellOption({"-R", "--recipient"}) String recipient
-        List<MessageResponse> messagesResponse = beanStalkClient.getMessages(chatId);
+    public List<MessageResponse> stalk(@ShellOption({"-R", "--recipient"}) String recieverName) { //@ShellOption({"-R", "--recipient"}) String recipient
+        List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recieverName, userId);
         return messagesResponse;
     }
 
