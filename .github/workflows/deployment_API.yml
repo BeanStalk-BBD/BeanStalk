@@ -44,6 +44,18 @@ jobs:
       id: vars
       run: echo "tag=$(date +'%Y.%m.%d.%H%M')" >> $GITHUB_OUTPUT
 
+    - name: Write confs
+      run: |
+        mkdir -p backend/target/.platform/nginx/conf.d/
+        echo "client_max_body_size 50M;" > backend/target/.platform/nginx/conf.d/proxy.conf
+        mkdir -p backend/target/.platform/
+        echo "container_commands:" > backend/target/.platform/00_myconf.config
+        echo "  01_reload_nginx:" >> backend/target/.platform/00_myconf.config
+        echo "    command: 'service nginx reload'" >> backend/target/.platform/00_myconf.config
+    
+    - name: Zip target directory
+      run: zip -r target.zip backend/target
+
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
       with:
@@ -53,4 +65,4 @@ jobs:
         environment_name: Beanstalk-env-2
         version_label: ${{ steps.vars.outputs.tag }}
         region: eu-west-1
-        deployment_package: backend/target/backend-0.0.1-SNAPSHOT.jar
+        deployment_package: target.zip
