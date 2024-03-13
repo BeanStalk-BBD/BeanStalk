@@ -1,6 +1,5 @@
 package com.beanstalk.backend.rest;
 
-import com.beanstalk.backend.config.SecurityConfiguration;
 import com.beanstalk.backend.model.MessageDTO;
 import com.beanstalk.backend.service.MessageService;
 import com.beanstalk.backend.service.UserService;
@@ -38,13 +37,10 @@ public class MessageResource {
     }
  @GetMapping("/{messageId}")
     public ResponseEntity<MessageDTO> getMessage(
-            @PathVariable(name = "messageId") final Long messageId, @RequestHeader ("Authorization") String authorization) {
-            if( authorization.isBlank() ) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
+            @PathVariable(name = "messageId") final Long messageId) {
+         
 
-            var tokenvalid= SecurityConfiguration.validateToken(authorization);
-            System.out.println(tokenvalid);
+          
         return ResponseEntity.ok(messageService.get(messageId));
     }
 
