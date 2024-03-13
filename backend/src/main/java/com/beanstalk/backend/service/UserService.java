@@ -41,6 +41,10 @@ public class UserService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public int getUserIDfromUserName(final String username){
+        return userRepository.findByUserName(username).getUserId();
+    }
+
     public Integer create(final UserDTO userDTO) {
         final User user = new User();
         mapToEntity(userDTO, user);

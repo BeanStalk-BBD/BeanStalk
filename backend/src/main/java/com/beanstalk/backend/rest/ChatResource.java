@@ -4,7 +4,7 @@ import com.beanstalk.backend.model.ChatDTO;
 import com.beanstalk.backend.model.MessageDTO;
 import com.beanstalk.backend.service.ChatService;
 import com.beanstalk.backend.service.MessageService;
-
+import com.beanstalk.backend.service.UserService;
 import com.beanstalk.backend.util.ReferencedException;
 import com.beanstalk.backend.util.ReferencedWarning;
 import jakarta.validation.Valid;
@@ -33,10 +33,11 @@ public class ChatResource {
 
     private final ChatService chatService;
     private final MessageService messageService;
-
-    public ChatResource(final ChatService chatService, final MessageService messageService) {
+    private final UserService userService;
+    public ChatResource(final ChatService chatService, final MessageService messageService, final UserService userService) {
         this.chatService = chatService;
         this.messageService = messageService;
+        this.userService=userService;
     }
 
     @GetMapping
@@ -78,11 +79,14 @@ public class ChatResource {
         return ResponseEntity.ok(messageService.findAllByChatId(chatId));
     }
 
-    @GetMapping({"/{chatId}/messages10/{page}","/{chatId}/messages10"})
+    @GetMapping({"/{recieverName}/{senderID}/messages10/{page}","/{recieverName}/{senderID}/messages10"})
     public ResponseEntity<List<MessageDTO>> getChatMessages10(
-            @PathVariable(name = "chatId") final Integer chatId, @PathVariable(name="page", required = false) final Integer page) {
+            @PathVariable(name = "recieverName") final String recieverName, @PathVariable(name="page", required = false) final Integer page, @PathVariable(name="senderID") final Integer senderID) {
                 int pageNumber = (page == null) ? 0 : page;
-        return ResponseEntity.ok(messageService.findTop10ByChatId(chatId,pageNumber));
+                final int recieverID=userService.getUserIDfromUserName(recieverName);
+                int chatID=messageService.getChatIDfromUserIDs(senderID,recieverID);
+                
+        return ResponseEntity.ok(messageService.findTop10ByChatId(chatID,pageNumber));
     }
     @GetMapping({"/openchats/{userId}/{page}","/openchats/{userId}"})
     public ResponseEntity<List<String>> getOpenChats(@PathVariable(name="userId") final Integer userId, @PathVariable(name="page",required = false) final Integer page) {

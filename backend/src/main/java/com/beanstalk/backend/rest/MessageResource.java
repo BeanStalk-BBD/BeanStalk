@@ -1,7 +1,9 @@
 package com.beanstalk.backend.rest;
 
+import com.beanstalk.backend.config.SecurityConfiguration;
 import com.beanstalk.backend.model.MessageDTO;
 import com.beanstalk.backend.service.MessageService;
+import com.beanstalk.backend.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,19 +25,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageResource {
 
     private final MessageService messageService;
-
-    public MessageResource(final MessageService messageService) {
+    private final UserService userService;
+    public MessageResource(final MessageService messageService, final UserService userService) {
         this.messageService = messageService;
+        this.userService=userService;
     }
+
 
     @GetMapping
     public ResponseEntity<List<MessageDTO>> getAllMessages() {
         return ResponseEntity.ok(messageService.findAll());
     }
-
-    @GetMapping("/{messageId}")
+ @GetMapping("/{messageId}")
     public ResponseEntity<MessageDTO> getMessage(
-            @PathVariable(name = "messageId") final Long messageId) {
+            @PathVariable(name = "messageId") final Long messageId, @RequestHeader ("Authorization") String authorization) {
+            if( authorization.isBlank() ) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            var tokenvalid= SecurityConfiguration.validateToken(authorization);
+            System.out.println(tokenvalid);
         return ResponseEntity.ok(messageService.get(messageId));
     }
 
@@ -44,8 +54,9 @@ public class MessageResource {
         return new ResponseEntity<>(createdMessageId, HttpStatus.CREATED);
     }
 
-    @PostMapping("/sendMessage/{recieverID}")
-    public ResponseEntity<Long> sendMessage(@RequestBody @Valid final MessageDTO messageDTO, @PathVariable(name="recieverID") final int recieverID) {
+    @PostMapping("/sendMessage/{recieverName}")
+    public ResponseEntity<Long> sendMessage(@RequestBody @Valid final MessageDTO messageDTO, @PathVariable(name="recieverName") final String recieverName) {
+        int recieverID=userService.getUserIDfromUserName(recieverName);
         int chatID=messageService.getChatId(messageDTO, recieverID);
         messageDTO.setChat(chatID);
         final Long createdMessageId = messageService.create(messageDTO);

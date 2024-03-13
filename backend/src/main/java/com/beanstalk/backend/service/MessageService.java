@@ -106,6 +106,9 @@ public class MessageService {
         int sender=messageDTO.getMessageSender();
         return(messageRepository.getChatID(sender, reciever));
     }
+    public int getChatIDfromUserIDs(int sender,int reciever){
+        return(messageRepository.getChatID(sender, reciever));
+    }
 
     public List<String> getOpenChats(int userId, int pageNumber){
         Pageable topTen = PageRequest.of(pageNumber, 5); 
