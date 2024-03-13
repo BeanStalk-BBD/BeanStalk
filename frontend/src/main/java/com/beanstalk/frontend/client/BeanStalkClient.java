@@ -12,13 +12,13 @@ import com.beanstalk.frontend.model.MessageResponse;
 // import com.beanstalk.frontend.model.StalksResponse;
 
 public interface BeanStalkClient {
-    @GetExchange("/chats/{reciverName}/{senderID}/messages10")
-    List<MessageResponse> getMessages(@PathVariable String reciverName, @PathVariable int senderID);
+    @GetExchange("/chats/{receiverName}/{senderID}/messages10")
+    List<MessageResponse> getMessages(@PathVariable String receiverName, @PathVariable int senderID);
 
-    @GetExchange("/chats/openchats/{userId}/{page}") //value = {"/article", "/article/{id}"}
+    @GetExchange("/chats/openchats/{userId}/{page}")
     List<String> getStalks(@PathVariable Integer userId, @PathVariable Integer page);
 
-    @PostExchange("/messages/sendMessage/{recieverName}")
-    Message postMessage(@PathVariable String recieverName, @RequestBody Message messageResponse);
+    @PostExchange("/messages/sendMessage/{receiverName}")
+    Long postMessage(@PathVariable String receiverName, @RequestBody Message message);
 
 }

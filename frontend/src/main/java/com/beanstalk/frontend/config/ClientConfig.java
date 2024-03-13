@@ -14,7 +14,6 @@ public class ClientConfig {
 	BeanStalkClient beanStalkClient() {
 		WebClient client = WebClient.builder()
 			.baseUrl("http://localhost:8080/api")
-			.defaultHeader("Accept", "application/json")
 			.build();
 		
 		HttpServiceProxyFactory factory = HttpServiceProxyFactory
