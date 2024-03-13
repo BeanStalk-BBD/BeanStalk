@@ -17,12 +17,6 @@ public class UserDTO {
     @UserUserNameUnique
     private String userName;
 
-    @NotNull
-    @Size(max = 50)
-    private String oauthUserName;
-
-    @NotNull
-    @Size(max = 50)
-    private String auth0Id;
+   
 
 }

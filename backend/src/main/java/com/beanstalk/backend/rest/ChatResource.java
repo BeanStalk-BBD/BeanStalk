@@ -7,6 +7,8 @@ import com.beanstalk.backend.service.MessageService;
 import com.beanstalk.backend.service.UserService;
 import com.beanstalk.backend.util.ReferencedException;
 import com.beanstalk.backend.util.ReferencedWarning;
+import com.beanstalk.backend.util.UserUtil;
+
 import jakarta.validation.Valid;
 
 import static java.lang.annotation.ElementType.METHOD;
@@ -84,14 +86,16 @@ public class ChatResource {
             @PathVariable(name = "recieverName") final String recieverName, @PathVariable(name="page", required = false) final Integer page, @PathVariable(name="senderID") final Integer senderID) {
                 int pageNumber = (page == null) ? 0 : page;
                 final int recieverID=userService.getUserIDfromUserName(recieverName);
-                int chatID=messageService.getChatIDfromUserIDs(senderID,recieverID);
+                int clientSenderID=userService.getClientUserID(UserUtil.userName);
+                int chatID=messageService.getChatIDfromUserIDs(clientSenderID,recieverID);
                 
         return ResponseEntity.ok(messageService.findTop10ByChatId(chatID,pageNumber));
     }
     @GetMapping({"/openchats/{userId}/{page}","/openchats/{userId}"})
     public ResponseEntity<List<String>> getOpenChats(@PathVariable(name="userId") final Integer userId, @PathVariable(name="page",required = false) final Integer page) {
         int pageNumber = (page == null) ? 0 : page;
-        return ResponseEntity.ok(messageService.getOpenChats(userId,pageNumber));
+        int clientUserID=userService.getClientUserID(UserUtil.userName);
+        return ResponseEntity.ok(messageService.getOpenChats(clientUserID,pageNumber));
     }
     
 }

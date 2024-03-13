@@ -1,8 +1,11 @@
 package com.beanstalk.backend.rest;
 
+import com.beanstalk.backend.config.OAuth2Filter;
 import com.beanstalk.backend.model.MessageDTO;
 import com.beanstalk.backend.service.MessageService;
 import com.beanstalk.backend.service.UserService;
+import com.beanstalk.backend.util.UserUtil;
+
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -39,7 +42,8 @@ public class MessageResource {
     public ResponseEntity<MessageDTO> getMessage(
             @PathVariable(name = "messageId") final Long messageId) {
          
-
+                //get username from the oauth2 filter
+                   System.out.println( UserUtil.userName); 
           
         return ResponseEntity.ok(messageService.get(messageId));
     }
@@ -53,6 +57,8 @@ public class MessageResource {
     @PostMapping("/sendMessage/{recieverName}")
     public ResponseEntity<Long> sendMessage(@RequestBody @Valid final MessageDTO messageDTO, @PathVariable(name="recieverName") final String recieverName) {
         int recieverID=userService.getUserIDfromUserName(recieverName);
+        var clientUserId=userService.getClientUserID(UserUtil.userName);
+        messageDTO.setMessageSender(clientUserId);
         int chatID=messageService.getChatId(messageDTO, recieverID);
         messageDTO.setChat(chatID);
         final Long createdMessageId = messageService.create(messageDTO);

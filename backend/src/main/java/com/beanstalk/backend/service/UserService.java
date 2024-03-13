@@ -44,6 +44,9 @@ public class UserService {
     public int getUserIDfromUserName(final String username){
         return userRepository.findByUserName(username).getUserId();
     }
+    public int getClientUserID(final String userName) {
+        return userRepository.getUserID(userName);
+    }
 
     public Integer create(final UserDTO userDTO) {
         final User user = new User();
@@ -65,15 +68,13 @@ public class UserService {
     private UserDTO mapToDTO(final User user, final UserDTO userDTO) {
         userDTO.setUserId(user.getUserId());
         userDTO.setUserName(user.getUserName());
-        userDTO.setOauthUserName(user.getOauthUserName());
-        userDTO.setAuth0Id(user.getAuth0Id());
+    
         return userDTO;
     }
 
     private User mapToEntity(final UserDTO userDTO, final User user) {
         user.setUserName(userDTO.getUserName());
-        user.setOauthUserName(userDTO.getOauthUserName());
-        user.setAuth0Id(userDTO.getAuth0Id());
+      
         return user;
     }
 
