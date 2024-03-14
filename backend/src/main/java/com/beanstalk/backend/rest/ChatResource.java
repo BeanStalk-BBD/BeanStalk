@@ -51,5 +51,10 @@ public class ChatResource {
         int clientUserID=userService.getClientUserID(UserUtil.userName);
         return ResponseEntity.ok(messageService.getOpenChats(clientUserID,pageNumber));
     }
+
+    @GetMapping("/getUserID")
+    public ResponseEntity<Integer> getMyUserID(){
+        return ResponseEntity.ok(userService.getClientUserID(UserUtil.userName));
+    }
     
 }
