@@ -40,7 +40,14 @@ jobs:
         distribution: 'oracle'
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: |
+        cd frontend
+        mvn clean
+        mvn compile
+        mvn -B package --file pom.xml
+        apt get install rpm
+        jpackage --input target/ --name beanstalkCLI --main-jar frontend-0.0.1-SNAPSHOT.jar --type deb
+
       
     - name: release
       uses: actions/create-release@v1
@@ -60,6 +67,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./target/beanstalk-1.0.0.jar
-        asset_name: beanstalk-1.0.0.jar
-        asset_content_type: application/java-archive
+        asset_path: frontend/beanstalkcli_1.0_amd64.deb
+        asset_name: beanstalkcli_1.0_amd64.deb
+        asset_content_type: application/vnd.debian.binary-package
+      run: ls
