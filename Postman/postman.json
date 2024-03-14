@@ -41,7 +41,7 @@
 			"response": []
 		},
 		{
-			"name": "Messages",
+			"name": "View Chat",
 			"event": [
 				{
 					"listen": "test",
@@ -56,24 +56,89 @@
 					}
 				}
 			],
-			"id": "7c856c3d-de61-4e22-82bc-fddcce7c454f",
+			"id": "b70f8d14-be5b-4c72-99c4-3a6135cafce3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": {
+						"addTokenTo": "header"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}/api/chats/1",
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
+		},
+		{
+			"name": "Send Message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2479491b-7840-4203-af85-0c6b33e0de57",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "46a31263-f5be-46cd-8957-bc387294c4a4",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"method": "POST",
 				"header": [],
-				"url": "{{base_url}}/api/messages",
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"messageContent\": \"WASSSUP\",\r\n    \"messageTimeStamp\": \"2024-03-10T09:57:28Z\",\r\n    \"chat\": 1,\r\n    \"messageSender\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/messages/sendMessage/Alice?",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"messages",
+						"sendMessage",
+						"Alice"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				},
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
 			},
 			"response": []
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "Bearer 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"
+		}
+	},
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "c3cb796a-e57e-4cc7-b158-4ccbf44aeb43",
+				"id": "6ee953a8-01ed-4b5b-bdbe-eff1583e880a",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -83,7 +148,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "dfccbed1-9227-4a37-b2b3-02358eb3315e",
+				"id": "c8230fd1-5a2d-4e2d-85bf-9e2bb4791425",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -95,6 +160,11 @@
 		{
 			"key": "base_url",
 			"value": "http://beanstalk.eu-west-1.elasticbeanstalk.com/api"
+		},
+		{
+			"key": "Authoriation",
+			"value": "Bearer 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",
+			"type": "string"
 		}
 	]
 }
