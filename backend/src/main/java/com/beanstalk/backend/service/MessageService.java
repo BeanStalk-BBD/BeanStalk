@@ -33,12 +33,6 @@ public class MessageService {
         this.userRepository = userRepository;
     }
 
-    public List<MessageDTO> findAll() {
-        final List<Message> messages = messageRepository.findAll(Sort.by("messageId"));
-        return messages.stream()
-                .map(message -> mapToDTO(message, new MessageDTO()))
-                .toList();
-    }
 
     public MessageDTO get(final Long messageId) {
         return messageRepository.findById(messageId)
@@ -52,16 +46,6 @@ public class MessageService {
         return messageRepository.save(message).getMessageId();
     }
 
-    public void update(final Long messageId, final MessageDTO messageDTO) {
-        final Message message = messageRepository.findById(messageId)
-                .orElseThrow(NotFoundException::new);
-        mapToEntity(messageDTO, message);
-        messageRepository.save(message);
-    }
-
-    public void delete(final Long messageId) {
-        messageRepository.deleteById(messageId);
-    }
     public List<MessageDTO> findAllByChatId(final Integer chatId) {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new NotFoundException("chat not found"));
