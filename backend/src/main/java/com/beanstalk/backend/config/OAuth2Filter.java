@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -18,13 +17,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.json.JSONObject;
-import com.beanstalk.backend.repos.UserRepository;
-import com.beanstalk.backend.service.UserService;
 import com.beanstalk.backend.util.UserUtil;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @Component
 @RequiredArgsConstructor
