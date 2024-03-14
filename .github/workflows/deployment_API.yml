@@ -42,7 +42,9 @@ jobs:
 
     - name: Set output
       id: vars
-      run: echo "tag=$(date +'%Y.%m.%d.%H%M')" >> $GITHUB_OUTPUT
+      run: |
+        echo "tag=$(date +'%Y.%m.%d.%H%M')" >> $GITHUB_OUTPUT
+        ls
 
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
