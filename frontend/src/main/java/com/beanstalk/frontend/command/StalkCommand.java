@@ -14,13 +14,14 @@ import com.beanstalk.frontend.shell.ShellHelper;
 import com.beanstalk.frontend.utils.Stalk;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 
 @ShellComponent
-public class StalkCommand extends SecuredCommand {
+public class StalkCommand {
 
     private final BeanStalkClient beanStalkClient;
     private Integer userId;
@@ -79,17 +80,30 @@ public class StalkCommand extends SecuredCommand {
     @ShellMethod("Sends a bean to the specified recipient and displays the relevant stalk.")
     @ShellMethodAvailability("isUserSignedIn")
     public String bean(@ShellOption({"-R", "--recipient"}) String recipient, @ShellOption({"-M", "--message"}) String message) {
-        Message message_model = new Message(message, OffsetDateTime.now(), 0, userId);
-        beanStalkClient.postMessage(recipient, message_model, headerMap);
-        List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recipient, userId, headerMap);
-        return Stalk.CreateStalk(messagesResponse, recipient, userId); 
+        try {
+            if (message.length() > 20)
+            return shellHelper.getErrorMessage("A message may not be longer than 20 characters!");
+            Message message_model = new Message(message, OffsetDateTime.now(), 0, userId);
+            beanStalkClient.postMessage(recipient, message_model, headerMap);
+            List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recipient, userId, headerMap);
+            return Stalk.CreateStalk(messagesResponse, recipient, userId); 
+        }
+        catch (Exception e) {
+            return getErrorMessage(e.getMessage());
+        }
     }
 
     @ShellMethod("Displays the stalk for the specified recipient.")
     @ShellMethodAvailability("isUserSignedIn")
     public String stalk(@ShellOption({"-R", "--recipient"}) String recipient) { 
-        List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recipient, userId, headerMap);
-        return Stalk.CreateStalk(messagesResponse, recipient, userId);
+        try {
+            List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recipient, userId, headerMap);
+            return Stalk.CreateStalk(messagesResponse, recipient, userId);
+        }
+        catch (Exception e) {
+            return getErrorMessage(e.getMessage());
+        }
+        
     }
 
     private Map<String, String> convertStringToMap(String data) {
@@ -110,6 +124,21 @@ public class StalkCommand extends SecuredCommand {
         AuthResponse authResponse = new AuthResponse(client_id, device_code, "urn:ietf:params:oauth:grant-type:device_code");
         String authStr = beanStalkClient.postAuth(authResponse, loginHeaderMap).split("&")[0];
         return convertStringToMap(authStr);
+    }
+
+    private String getErrorMessage(String e) {
+        return shellHelper.getErrorMessage(
+                e.split(" ")[0].equals("404") 
+                    ? "The specified user doesn't exist!" 
+                    : "Unspecified error: please try again!"
+        );
+    }
+
+    public Availability isUserSignedIn() {
+        return (userId == null 
+            ? Availability.unavailable("you are not logged in. Please log in to be able to use this command!") 
+            : Availability.available()
+        );        
     }
 
 }
