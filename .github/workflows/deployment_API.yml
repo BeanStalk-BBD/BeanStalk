@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-      - 'be/*'
-      - 'cicd/*'
+      - feature/backendRedo
 
 jobs:
   build:

@@ -45,21 +45,6 @@ public class UserResource {
         return new ResponseEntity<>(createdUserId, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<Integer> updateUser(@PathVariable(name = "userId") final Integer userId,
-            @RequestBody @Valid final UserDTO userDTO) {
-        userService.update(userId, userDTO);
-        return ResponseEntity.ok(userId);
-    }
-
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable(name = "userId") final Integer userId) {
-        final ReferencedWarning referencedWarning = userService.getReferencedWarning(userId);
-        if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
-        }
-        userService.delete(userId);
-        return ResponseEntity.noContent().build();
-    }
+    
 
 }

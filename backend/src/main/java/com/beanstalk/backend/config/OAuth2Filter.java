@@ -10,8 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.json.JSONObject;
@@ -44,7 +47,7 @@ public class OAuth2Filter extends OncePerRequestFilter {
    
             return;
         }
-
+        try{
         token = authHeader.substring(7);
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -53,17 +56,19 @@ public class OAuth2Filter extends OncePerRequestFilter {
         HttpEntity<String> entity = new HttpEntity<>(headers);
         ResponseEntity<String> restResponse = restTemplate.exchange(
                 "https://api.github.com/user", HttpMethod.GET, entity, String.class);
-
-        if (!restResponse.getStatusCode().is2xxSuccessful()) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("{\"error\": \"Unauthorized\"}");
-            UserUtil.userName = "";
-            return;
-        }
-
+                
         JSONObject jsonObject = new JSONObject(restResponse.getBody());
         UserUtil.userName = jsonObject.getString("login");
 
         filterChain.doFilter(request, response);
+        }
+         catch (HttpClientErrorException  e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("{\"error\": \"Unauthorized: Bad credentials\"}");
+                UserUtil.userName = "";
+                return; 
+        }
+    
+
     }
 }

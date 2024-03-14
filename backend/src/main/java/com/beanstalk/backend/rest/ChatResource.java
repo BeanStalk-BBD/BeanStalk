@@ -42,38 +42,7 @@ public class ChatResource {
         this.userService=userService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<ChatDTO>> getAllChats() {
-        return ResponseEntity.ok(chatService.findAll());
-    }
-
-    @GetMapping("/{chatId}")
-    public ResponseEntity<ChatDTO> getChat(@PathVariable(name = "chatId") final Integer chatId) {
-        return ResponseEntity.ok(chatService.get(chatId));
-    }
-
-    @PostMapping
-    public ResponseEntity<Integer> createChat(@RequestBody @Valid final ChatDTO chatDTO) {
-        final Integer createdChatId = chatService.create(chatDTO);
-        return new ResponseEntity<>(createdChatId, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{chatId}")
-    public ResponseEntity<Integer> updateChat(@PathVariable(name = "chatId") final Integer chatId,
-            @RequestBody @Valid final ChatDTO chatDTO) {
-        chatService.update(chatId, chatDTO);
-        return ResponseEntity.ok(chatId);
-    }
-
-    @DeleteMapping("/{chatId}")
-    public ResponseEntity<Void> deleteChat(@PathVariable(name = "chatId") final Integer chatId) {
-        final ReferencedWarning referencedWarning = chatService.getReferencedWarning(chatId);
-        if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
-        }
-        chatService.delete(chatId);
-        return ResponseEntity.noContent().build();
-    }
+   
 
     @GetMapping("/{chatId}/messages")
     public ResponseEntity<List<MessageDTO>> getChatMessages(

@@ -34,10 +34,7 @@ public class MessageResource {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<MessageDTO>> getAllMessages() {
-        return ResponseEntity.ok(messageService.findAll());
-    }
+   
  @GetMapping("/{messageId}")
     public ResponseEntity<MessageDTO> getMessage(
             @PathVariable(name = "messageId") final Long messageId) {
@@ -48,14 +45,14 @@ public class MessageResource {
         return ResponseEntity.ok(messageService.get(messageId));
     }
 
-    @PostMapping
-    public ResponseEntity<Long> createMessage(@RequestBody @Valid final MessageDTO messageDTO) {
-        final Long createdMessageId = messageService.create(messageDTO);
-        return new ResponseEntity<>(createdMessageId, HttpStatus.CREATED);
-    }
+ 
 
     @PostMapping("/sendMessage/{recieverName}")
     public ResponseEntity<Long> sendMessage(@RequestBody @Valid final MessageDTO messageDTO, @PathVariable(name="recieverName") final String recieverName) {
+        boolean userExists=userService.userNameExists(recieverName);
+        if(!userExists){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         int recieverID=userService.getUserIDfromUserName(recieverName);
         var clientUserId=userService.getClientUserID(UserUtil.userName);
         messageDTO.setMessageSender(clientUserId);
@@ -65,19 +62,6 @@ public class MessageResource {
         return new ResponseEntity<>(createdMessageId, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{messageId}")
-    public ResponseEntity<Long> updateMessage(
-            @PathVariable(name = "messageId") final Long messageId,
-            @RequestBody @Valid final MessageDTO messageDTO) {
-        messageService.update(messageId, messageDTO);
-        return ResponseEntity.ok(messageId);
-    }
 
-    @DeleteMapping("/{messageId}")
-    public ResponseEntity<Void> deleteMessage(
-            @PathVariable(name = "messageId") final Long messageId) {
-        messageService.delete(messageId);
-        return ResponseEntity.noContent().build();
-    }
 
 }
