@@ -27,12 +27,6 @@
 				"disableBodyPruning": true
 			},
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "Bearer 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"
-					}
-				},
 				"method": "GET",
 				"header": [],
 				"url": "{{base_url}}/chats/openchats/1",
@@ -90,12 +84,6 @@
 				"disableBodyPruning": true
 			},
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "Bearer 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"
-					}
-				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -116,14 +104,14 @@
 	"auth": {
 		"type": "bearer",
 		"bearer": {
-			"token": "Bearer gho_BjuFdUQYnCNMVJfJGZg1gQ4sZy6ube04EIXl"
+			"token": "{{AUTH_TOKEN}}"
 		}
 	},
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "2df40973-e059-421e-b0c0-be656ccae24a",
+				"id": "9be09f1b-bca3-4b44-bbfd-3396acaf03b4",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -133,7 +121,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "d491afc8-b27a-45c8-a8c8-0630b26ad739",
+				"id": "360cac14-4638-40ad-aec7-afe43d7cd289",
 				"type": "text/javascript",
 				"exec": [
 					""
