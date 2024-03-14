@@ -5,7 +5,7 @@ on:
       - main
       - 'be/*'
       - 'cicd/*'
-      
+
 env:
   AWS_REGION: "eu-west-1"
   AWS_IAM_ROLE_ARN: ${{ secrets.AWS_IAM_ROLE_ARN }}
@@ -20,7 +20,22 @@ permissions:
 
       
 jobs:
+  API-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      - name: Run API tests
+        run: |
+          postman collection run "2290176-a8ddc55c-0615-44e7-96b1-71db6b0ca109" -e "2290176-d81d8522-781c-4a59-97e0-df3deb40d4ad"
+          # Lint your API using Postman CLI
+          postman api lint 5ed0ca86-439b-46c5-9167-049edffdc488
   Build:
+    needs: API-Test
     runs-on: ubuntu-latest
     steps:
 
