@@ -27,6 +27,12 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "Bearer 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"
+					}
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -62,9 +68,9 @@
 			},
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": {
-						"addTokenTo": "header"
+					"type": "bearer",
+					"bearer": {
+						"token": "Bearer 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"
 					}
 				},
 				"method": "GET",
@@ -95,6 +101,12 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "Bearer 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"
+					}
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -115,14 +127,14 @@
 	"auth": {
 		"type": "bearer",
 		"bearer": {
-			"token": "Bearer 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"
+			"token": "Bearer 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"
 		}
 	},
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "a801563f-1b8b-4195-ab40-4a939afe968f",
+				"id": "756edb32-874f-4030-bb14-d1fbb83b0bbe",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -132,7 +144,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "77752bda-b01a-4e32-8f2a-e2caa707c3a2",
+				"id": "33bc14d8-fc71-43d8-9b56-2b7fd5b3eeb0",
 				"type": "text/javascript",
 				"exec": [
 					""
