@@ -48,13 +48,17 @@ jobs:
         jpackage --input target/ --name beanstalkCLI --main-jar frontend-0.0.1-SNAPSHOT.jar --type deb
         ls
       
+    - name: Set Version Tag
+      id: version
+      run: echo "tag=$(date +'%Y.%m.%d.%H%M')" >> $GITHUB_OUTPUT
+
     - name: release
       uses: actions/create-release@v1
       id: create_release
       with:
         draft: false
         prerelease: false
-        release_name: ${{ steps.version.outputs.version }}
+        release_name: Release - ${{ steps.version.outputs.version }}
         tag_name: ${{ steps.version.outputs.version }}
       env:
         GITHUB_TOKEN: ${{ github.token }}
