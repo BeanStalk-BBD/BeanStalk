@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Get data",
+			"name": "Chats",
 			"event": [
 				{
 					"listen": "test",
