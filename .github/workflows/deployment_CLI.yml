@@ -47,7 +47,7 @@ jobs:
         mvn -B package --file pom.xml
         apt get install rpm
         jpackage --input target/ --name beanstalkCLI --main-jar frontend-0.0.1-SNAPSHOT.jar --type deb
-
+        ls
       
     - name: release
       uses: actions/create-release@v1
@@ -70,4 +70,3 @@ jobs:
         asset_path: frontend/beanstalkcli_1.0_amd64.deb
         asset_name: beanstalkcli_1.0_amd64.deb
         asset_content_type: application/vnd.debian.binary-package
-      run: ls
