@@ -49,6 +49,7 @@ jobs:
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v21
       with:
+        wait_for_deployment: false
         aws_access_key: ${{ steps.creds.outputs.aws-access-key-id }}
         aws_secret_key: ${{ steps.creds.outputs.aws-secret-access-key }}
         application_name: beanstalk
