@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "shell.out.info",
+    "type": "java.lang.String",
+    "description": "A description for 'shell.out.info'"
+  },
+  {
+    "name": "shell.out.success",
+    "type": "java.lang.String",
+    "description": "A description for 'shell.out.success'"
+  },
+  {
+    "name": "shell.out.warning",
+    "type": "java.lang.String",
+    "description": "A description for 'shell.out.warning'"
+  },
+  {
+    "name": "shell.out.error",
+    "type": "java.lang.String",
+    "description": "A description for 'shell.out.error'"
+  }
+]}
