@@ -44,7 +44,7 @@ jobs:
         mvn clean
         mvn compile
         mvn -B package --file pom.xml
-        apt get install rpm
+        sudo apt-get install rpm
         jpackage --input target/ --name beanstalkCLI --main-jar frontend-0.0.1-SNAPSHOT.jar --type deb
         ls
       
