@@ -4,7 +4,10 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
+
 import com.beanstalk.frontend.client.BeanStalkClient;
 import com.beanstalk.frontend.model.AuthResponse;
 import com.beanstalk.frontend.model.Login;
@@ -72,12 +75,22 @@ public class StalkCommand {
 
     @ShellMethod("Displays a list of the most recent stalks.")
     @ShellMethodAvailability("isUserSignedIn")
-    public List<String> stalks(@ShellOption(value = {"-P", "--page"}, defaultValue = "0") int page) {
+    public String stalks(@ShellOption(value = {"-P", "--page"}, defaultValue = "0") int page) {
         List<String> stalksResponse = beanStalkClient.getStalks(userId, page, headerMap);
-        return stalksResponse;
+        StringBuilder stalksString = new StringBuilder();
+
+        if (stalksResponse.isEmpty())
+            stalksString.append(shellHelper.getInfoMessage("No stalks yet! Send your first bean to start one."));
+        else {
+            stalksString.append("Recent stalks:\n");
+            stalksResponse.stream().collect(Collectors.toCollection(LinkedList::new))
+                .forEach(x -> stalksString.append(String.format("  - %s\n", x)));
+        }
+
+        return stalksString.toString();
     }
 
-    @ShellMethod("Sends a bean to the specified recipient and displays the relevant stalk.")
+    @ShellMethod("Sends a bean (single word no longer than 20 characters) to the specified recipient and displays the relevant stalk.")
     @ShellMethodAvailability("isUserSignedIn")
     public String bean(@ShellOption({"-R", "--recipient"}) String recipient, @ShellOption({"-M", "--message"}) String message) {
         try {

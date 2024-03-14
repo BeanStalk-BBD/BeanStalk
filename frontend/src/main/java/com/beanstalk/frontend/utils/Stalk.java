@@ -9,11 +9,13 @@ import com.beanstalk.frontend.model.MessageResponse;
 public class Stalk {
     public static String CreateStalk(List<MessageResponse> messages, String recipient, Integer userId) {
         StringBuilder stalk = new StringBuilder();
-        MessageResponse firstMessage = messages.stream().reduce((first, second) -> second).orElse(null);
-        stalk.append(DrawMessage(firstMessage.messageContent(), true, userId==firstMessage.messageSender()));
-        messages.stream().limit(messages.size()-1).collect(Collectors.toCollection(LinkedList::new))
-            .descendingIterator()
-            .forEachRemaining(x -> stalk.append(DrawMessage(x.messageContent(), false, userId==x.messageSender())));
+        if (!messages.isEmpty()) {
+            MessageResponse firstMessage = messages.stream().reduce((first, second) -> second).orElse(null);
+            stalk.append(DrawMessage(firstMessage.messageContent(), true, userId==firstMessage.messageSender()));
+            messages.stream().limit(messages.size()-1).collect(Collectors.toCollection(LinkedList::new))
+                .descendingIterator()
+                .forEachRemaining(x -> stalk.append(DrawMessage(x.messageContent(), false, userId==x.messageSender())));
+        }
 
         stalk.append("                           |\n");
         stalk.append(String.format("  @%-24s|\n", recipient));
