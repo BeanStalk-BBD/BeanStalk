@@ -27,7 +27,13 @@
 				"disableBodyPruning": true
 			},
 			"request": {
-				"method": "POST",
+				"auth": {
+					"type": "oauth2",
+					"oauth2": {
+						"addTokenTo": "header"
+					}
+				},
+				"method": "GET",
 				"header": [],
 				"url": "{{base_url}}/api/chats/1",
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
@@ -35,50 +41,30 @@
 			"response": []
 		},
 		{
-			"name": "Delete data",
+			"name": "Messages",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"type": "text/javascript",
+						"id": "2479491b-7840-4203-af85-0c6b33e0de57",
 						"exec": [
-							"pm.test(\"Successful DELETE request\", function () {",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
-							"});",
-							""
-						]
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
 					}
 				}
 			],
-			"id": "1f59995a-9689-4738-b9c6-c8d4204b9a4f",
+			"id": "7c856c3d-de61-4e22-82bc-fddcce7c454f",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "DELETE",
+				"method": "POST",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "{{base_url}}/info?id=1",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"info"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
-						}
-					]
-				},
-				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
+				"url": "{{base_url}}/api/messages",
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
 			},
 			"response": []
 		}
@@ -87,7 +73,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "de14fe47-1791-4b34-a4d9-e8027a02c7db",
+				"id": "c3cb796a-e57e-4cc7-b158-4ccbf44aeb43",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -97,7 +83,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "1fe7876c-b94c-4254-aead-de59c9f08277",
+				"id": "dfccbed1-9227-4a37-b2b3-02358eb3315e",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -108,7 +94,7 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "http://beanstalk2.eu-west-1.elasticbeanstalk.com/"
+			"value": "http://beanstalk.eu-west-1.elasticbeanstalk.com/api"
 		}
 	]
 }
