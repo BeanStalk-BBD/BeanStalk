@@ -3,7 +3,10 @@ name: Build and Release CLI
 on:
   push:
     branches:
-      main
+      - main
+      - 'fe/*'
+      - 'cicd/*'
+
 env:
   AWS_REGION: "eu-west-1"
   AWS_IAM_ROLE_ARN: ${{ secrets.AWS_IAM_ROLE_ARN }}

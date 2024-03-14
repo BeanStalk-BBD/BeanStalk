@@ -3,8 +3,9 @@ name: Build and Release - DB
 on:
   push:
     branches:
-      main
-
+      - main
+      - 'db/*'
+      - 'cicd/*'
 env:
   AWS_REGION: "eu-west-1"
   AWS_IAM_ROLE_ARN: ${{ secrets.AWS_IAM_ROLE_ARN }}
