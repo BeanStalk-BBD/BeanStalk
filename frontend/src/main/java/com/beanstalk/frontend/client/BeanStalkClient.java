@@ -20,14 +20,17 @@ public interface BeanStalkClient {
     String postLogin(@RequestBody Login login, @RequestHeader Map<String, String> headers);
 
     @GetExchange("/chats/{receiverName}/{senderID}/messages10")
-    List<MessageResponse> getMessages(@PathVariable String receiverName, @PathVariable int senderID);
+    List<MessageResponse> getMessages(@PathVariable String receiverName, @PathVariable int senderID, @RequestHeader Map<String, String> headers);
 
     @GetExchange("/chats/openchats/{userId}/{page}")
-    List<String> getStalks(@PathVariable Integer userId, @PathVariable Integer page);
+    List<String> getStalks(@PathVariable Integer userId, @PathVariable Integer page, @RequestHeader Map<String, String> headers);
 
     @PostExchange("/messages/sendMessage/{receiverName}")
-    Long postMessage(@PathVariable String receiverName, @RequestBody Message message);
+    Long postMessage(@PathVariable String receiverName, @RequestBody Message message, @RequestHeader Map<String, String> headers);
     
     @PostExchange("https://github.com/login/oauth/access_token")
     String postAuth(@RequestBody AuthResponse authResponse, @RequestHeader Map<String, String> headers);
+
+    @GetExchange("/chats/getUserID")
+    Integer getUserId(@RequestHeader Map<String, String> headers);
 }

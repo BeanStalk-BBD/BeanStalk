@@ -17,7 +17,7 @@ public class ClientConfig {
     @Bean
 	BeanStalkClient beanStalkClient() {
 		WebClient client = WebClient.builder()
-			.baseUrl("http://localhost:8080/api")
+			.baseUrl("http://beanstalk.eu-west-1.elasticbeanstalk.com/api")
 			.build();
 		
 		HttpServiceProxyFactory factory = HttpServiceProxyFactory

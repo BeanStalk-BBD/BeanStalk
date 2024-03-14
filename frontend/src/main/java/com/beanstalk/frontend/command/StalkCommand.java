@@ -13,7 +13,6 @@ import com.beanstalk.frontend.model.MessageResponse;
 import com.beanstalk.frontend.shell.ShellHelper;
 import com.beanstalk.frontend.utils.Stalk;
 
-import org.jline.reader.LineReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -24,8 +23,9 @@ import org.springframework.shell.standard.ShellOption;
 public class StalkCommand extends SecuredCommand {
 
     private final BeanStalkClient beanStalkClient;
-    private final Integer userId;
+    private Integer userId;
     private final String client_id = "d3627dbaee1703774ddd";
+    private Map<String, String> loginHeaderMap = new HashMap<>();
     private Map<String, String> headerMap = new HashMap<>();
 
     @Autowired
@@ -33,24 +33,24 @@ public class StalkCommand extends SecuredCommand {
 
     public StalkCommand(BeanStalkClient beanStalkClient) {
         this.beanStalkClient = beanStalkClient;
-        this.userId = 1;
-        this.headerMap.put("Content-Type", "application/json");
+        this.loginHeaderMap.put("Content-Type", "application/json");
     }
 
     @ShellMethod("Log in with GitHub.")
     public void login() {
-        Map<String, String> responseMap = convertStringToMap(beanStalkClient.postLogin(new Login(client_id), headerMap));
+        Map<String, String> responseMap = convertStringToMap(beanStalkClient.postLogin(new Login(client_id), loginHeaderMap));
         shellHelper.print(String.format(
-            "Please follow the link: https://github.com/login/device \nYour code is: %s \n%s", 
-            responseMap.get("user_code"), 
-            responseMap.get("device_code")
+            "Please follow the link: https://github.com/login/device \nYour code is: %s", 
+            responseMap.get("user_code")
         ));
-        // AuthResponse authResponse = new AuthResponse(client_id, "", "");
+        
         Map<String, String> authMap = new HashMap<String, String>();
         do {
             authMap = getAuthMap(responseMap.get("device_code"));
             if (authMap.containsKey("access_token")) {
+                this.headerMap.put("Authorization", "Bearer " + authMap.get("access_token"));
                 shellHelper.printSuccess("Login successful!");
+                this.userId = beanStalkClient.getUserId(headerMap);
                 break;
             }
             else {
@@ -72,7 +72,7 @@ public class StalkCommand extends SecuredCommand {
     @ShellMethod("Displays a list of the most recent stalks.")
     @ShellMethodAvailability("isUserSignedIn")
     public List<String> stalks(@ShellOption(value = {"-P", "--page"}, defaultValue = "0") int page) {
-        List<String> stalksResponse = beanStalkClient.getStalks(userId, page);
+        List<String> stalksResponse = beanStalkClient.getStalks(userId, page, headerMap);
         return stalksResponse;
     }
 
@@ -80,15 +80,15 @@ public class StalkCommand extends SecuredCommand {
     @ShellMethodAvailability("isUserSignedIn")
     public String bean(@ShellOption({"-R", "--recipient"}) String recipient, @ShellOption({"-M", "--message"}) String message) {
         Message message_model = new Message(message, OffsetDateTime.now(), 0, userId);
-        beanStalkClient.postMessage(recipient, message_model);
-        List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recipient, userId);
+        beanStalkClient.postMessage(recipient, message_model, headerMap);
+        List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recipient, userId, headerMap);
         return Stalk.CreateStalk(messagesResponse, recipient, userId); 
     }
 
     @ShellMethod("Displays the stalk for the specified recipient.")
     @ShellMethodAvailability("isUserSignedIn")
     public String stalk(@ShellOption({"-R", "--recipient"}) String recipient) { 
-        List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recipient, userId);
+        List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recipient, userId, headerMap);
         return Stalk.CreateStalk(messagesResponse, recipient, userId);
     }
 
@@ -108,7 +108,7 @@ public class StalkCommand extends SecuredCommand {
     private Map<String, String> getAuthMap(String device_code) {
         shellHelper.prompt("\n\nPress 'enter' to continue once you have authorised this application...");
         AuthResponse authResponse = new AuthResponse(client_id, device_code, "urn:ietf:params:oauth:grant-type:device_code");
-        String authStr = beanStalkClient.postAuth(authResponse, headerMap).split("&")[0];
+        String authStr = beanStalkClient.postAuth(authResponse, loginHeaderMap).split("&")[0];
         return convertStringToMap(authStr);
     }
 
