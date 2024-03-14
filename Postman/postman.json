@@ -27,15 +27,15 @@
 				"disableBodyPruning": true
 			},
 			"request": {
-				"auth": {
-					"type": "oauth2",
-					"oauth2": {
-						"addTokenTo": "header"
-					}
-				},
 				"method": "GET",
-				"header": [],
-				"url": "{{base_url}}/api/chats/1",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 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",
+						"type": "text"
+					}
+				],
+				"url": "{{base_url}}/chats/openchats/1",
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
 			},
 			"response": []
@@ -69,7 +69,7 @@
 				},
 				"method": "GET",
 				"header": [],
-				"url": "{{base_url}}/api/chats/1",
+				"url": "{{base_url}}/chats/BOB/1/messages10",
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
 			},
 			"response": []
@@ -106,23 +106,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "{{base_url}}/messages/sendMessage/Alice?",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"messages",
-						"sendMessage",
-						"Alice"
-					],
-					"query": [
-						{
-							"key": "",
-							"value": null
-						}
-					]
-				},
+				"url": "{{base_url}}/messages/sendMessage/Alice",
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
 			},
 			"response": []
@@ -138,7 +122,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "6ee953a8-01ed-4b5b-bdbe-eff1583e880a",
+				"id": "a801563f-1b8b-4195-ab40-4a939afe968f",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -148,7 +132,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "c8230fd1-5a2d-4e2d-85bf-9e2bb4791425",
+				"id": "77752bda-b01a-4e32-8f2a-e2caa707c3a2",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -160,11 +144,6 @@
 		{
 			"key": "base_url",
 			"value": "http://beanstalk.eu-west-1.elasticbeanstalk.com/api"
-		},
-		{
-			"key": "Authoriation",
-			"value": "Bearer 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",
-			"type": "string"
 		}
 	]
 }
