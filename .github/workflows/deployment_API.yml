@@ -1,7 +1,11 @@
 name: Build and Release - API
 on:
   push:
-
+    branches:
+      - main
+      - 'be/*'
+      - 'cicd/*'
+      
 env:
   AWS_REGION: "eu-west-1"
   AWS_IAM_ROLE_ARN: ${{ secrets.AWS_IAM_ROLE_ARN }}
@@ -13,6 +17,8 @@ permissions:
   contents: read
   
 
+
+      
 jobs:
   Build:
     runs-on: ubuntu-latest
