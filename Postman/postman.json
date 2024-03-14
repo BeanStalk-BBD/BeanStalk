@@ -30,7 +30,7 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "Bearer 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"
+						"token": "Bearer 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"
 					}
 				},
 				"method": "GET",
@@ -98,7 +98,7 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "Bearer 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"
+						"token": "Bearer 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"
 					}
 				},
 				"method": "POST",
