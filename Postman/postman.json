@@ -61,6 +61,12 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "Bearer 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"
+					}
+				},
 				"method": "GET",
 				"header": [],
 				"url": "{{base_url}}/chats/BOB/1/messages10",
@@ -122,7 +128,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "6184f6e1-ab49-446b-a771-7393c6162180",
+				"id": "e16ed1fd-bc64-49b6-8162-8f562c6d37e9",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -132,7 +138,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "0880daac-dd6e-483f-b541-823b1c7a127e",
+				"id": "d76ef04a-d998-4fe6-91cb-7caacad0d80b",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -143,7 +149,7 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "http://beanstalk2.eu-west-1.elasticbeanstalk.com/api"
+			"value": "http://beanstalk.eu-west-1.elasticbeanstalk.com/api"
 		}
 	]
 }
