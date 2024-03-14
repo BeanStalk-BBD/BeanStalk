@@ -2,7 +2,8 @@ name: Build and Release - API
 on:
   push:
     branches:
-      main
+      - main
+      - 'be/*'
       
 jobs:
   build:

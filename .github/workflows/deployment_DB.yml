@@ -3,7 +3,8 @@ name: Build and Release - DB
 on:
   push:
     branches:
-      main
+      - main
+      - 'db/*'
 
 env:
   AWS_REGION: "eu-west-1"
