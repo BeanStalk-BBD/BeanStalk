@@ -58,18 +58,13 @@
 			],
 			"id": "b70f8d14-be5b-4c72-99c4-3a6135cafce3",
 			"protocolProfileBehavior": {
-				"disableBodyPruning": true
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
 			},
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "Bearer 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"
-					}
-				},
 				"method": "GET",
 				"header": [],
-				"url": "{{base_url}}/chats/BOB/1/messages10",
+				"url": "{{base_url}}/chats/Alice/1/messages10",
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
 			},
 			"response": []
@@ -121,14 +116,14 @@
 	"auth": {
 		"type": "bearer",
 		"bearer": {
-			"token": "Bearer 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"
+			"token": "Bearer gho_BjuFdUQYnCNMVJfJGZg1gQ4sZy6ube04EIXl"
 		}
 	},
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "e16ed1fd-bc64-49b6-8162-8f562c6d37e9",
+				"id": "2df40973-e059-421e-b0c0-be656ccae24a",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -138,7 +133,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "d76ef04a-d998-4fe6-91cb-7caacad0d80b",
+				"id": "d491afc8-b27a-45c8-a8c8-0630b26ad739",
 				"type": "text/javascript",
 				"exec": [
 					""
