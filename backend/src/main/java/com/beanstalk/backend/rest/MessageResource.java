@@ -35,15 +35,6 @@ public class MessageResource {
 
 
    
- @GetMapping("/{messageId}")
-    public ResponseEntity<MessageDTO> getMessage(
-            @PathVariable(name = "messageId") final Long messageId) {
-         
-                //get username from the oauth2 filter
-                   System.out.println( UserUtil.userName); 
-          
-        return ResponseEntity.ok(messageService.get(messageId));
-    }
 
  
 

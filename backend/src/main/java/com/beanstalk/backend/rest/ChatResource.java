@@ -42,24 +42,21 @@ public class ChatResource {
         this.userService=userService;
     }
 
-   
-
-    @GetMapping("/{chatId}/messages")
-    public ResponseEntity<List<MessageDTO>> getChatMessages(
-            @PathVariable(name = "chatId") final Integer chatId) {
-        return ResponseEntity.ok(messageService.findAllByChatId(chatId));
-    }
-
     @GetMapping({"/{recieverName}/{senderID}/messages10/{page}","/{recieverName}/{senderID}/messages10"})
     public ResponseEntity<List<MessageDTO>> getChatMessages10(
             @PathVariable(name = "recieverName") final String recieverName, @PathVariable(name="page", required = false) final Integer page, @PathVariable(name="senderID") final Integer senderID) {
                 int pageNumber = (page == null) ? 0 : page;
+                boolean userExists=userService.userNameExists(recieverName);
+                if(!userExists){
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
                 final int recieverID=userService.getUserIDfromUserName(recieverName);
                 int clientSenderID=userService.getClientUserID(UserUtil.userName);
                 int chatID=messageService.getChatIDfromUserIDs(clientSenderID,recieverID);
                 
         return ResponseEntity.ok(messageService.findTop10ByChatId(chatID,pageNumber));
     }
+
     @GetMapping({"/openchats/{userId}/{page}","/openchats/{userId}"})
     public ResponseEntity<List<String>> getOpenChats(@PathVariable(name="userId") final Integer userId, @PathVariable(name="page",required = false) final Integer page) {
         int pageNumber = (page == null) ? 0 : page;
