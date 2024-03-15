@@ -14,6 +14,7 @@ spring:
     open-in-view: false
     properties:
       hibernate:
+        ddl-auto: none
         jdbc:
           lob:
             non_contextual_creation: true
@@ -31,3 +32,6 @@ error:
       5xx: ERROR
     codes:
       UserUserNameUnique: USER_USER_NAME_UNIQUE
+
+server:
+  port: 5000

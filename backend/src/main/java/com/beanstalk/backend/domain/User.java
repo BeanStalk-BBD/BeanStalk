@@ -30,11 +30,6 @@ public class User {
     @Column(nullable = false, unique = true, length = 50, name = "username")
     private String userName;
 
-    @Column(nullable = false, length = 50, name = "oauthusername")
-    private String oauthUserName;
-
-    @Column(nullable = false, length = 50, name = "auth0id")
-    private String auth0Id;
 
     @OneToMany(mappedBy = "chatUserId1")
     private Set<Chat> chatUserId1Chats;
