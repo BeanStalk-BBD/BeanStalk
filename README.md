@@ -30,7 +30,7 @@
 
 
 
-# TO INSTALL THE PACKAGE FOR LINUX
+# TO INSTALL THE PACKAGE FOR LINUX/WSL
 
 Download the package from github:
 
