@@ -67,7 +67,6 @@ public class StalkCommand {
                 }
                 else {
                     shellHelper.printError("Unspecified error: please run the 'login' command again.");
-                    break;
                 }
             }
         } while (true);
@@ -94,14 +93,17 @@ public class StalkCommand {
     @ShellMethodAvailability("isUserSignedIn")
     public String bean(@ShellOption({"-R", "--recipient"}) String recipient, @ShellOption({"-M", "--message"}) String message) {
         try {
+            if (message == null)
+                return shellHelper.getErrorMessage("Message may not be blank!");
             if (message.length() > 20)
-            return shellHelper.getErrorMessage("A message may not be longer than 20 characters!");
+                return shellHelper.getErrorMessage("A message may not be longer than 20 characters!");
             Message message_model = new Message(message, OffsetDateTime.now(), 0, userId);
             beanStalkClient.postMessage(recipient, message_model, headerMap);
             List<MessageResponse> messagesResponse = beanStalkClient.getMessages(recipient, userId, headerMap);
             return Stalk.CreateStalk(messagesResponse, recipient, userId); 
         }
         catch (Exception e) {
+            shellHelper.print(e.getMessage());
             return getErrorMessage(e.getMessage());
         }
     }
